@@ -1,6 +1,17 @@
 [package]
-name = "embedded-sensors"
-version = "0.1.0"
+authors = ["Kurtis Dinelle <t-kudinelle@microsoft.com>"]
+categories = ["embedded", "no-std", "hardware-support"]
 edition = "2021"
+rust-version = "1.79"
+keywords = ["hal", "sensors"]
+license = "MIT"
+name = "embedded-sensors"
+readme = "README.md"
+repository = "https://github.com/pop-project/embedded-sensors"
+version = "0.1.0"
+
+[features]
+defmt = ["dep:defmt"]
 
 [dependencies]
+defmt = { package = "defmt", version = "0.3.7", optional = true }
