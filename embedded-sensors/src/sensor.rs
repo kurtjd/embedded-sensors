@@ -1,11 +1,8 @@
 //! Blocking Sensor API
 //!
-//! This module predominantly contains error-handling generic to all sensors,
-//! however traits which apply to multiple kinds of sensors may be defined
-//! here as well as needed.
+//! This module contains error-handling and traits generic to all sensors.
 //!
-//! Please see specific sensor-type modules for example usage
-//! (e.g. see temperature.rs for TemperatureSensor examples).
+//! Please see specific sensor-type modules for addtional example usage
 
 /// The underlying type representing a sensor sample.
 /// Sampling methods should return samples in finer units
@@ -47,6 +44,8 @@ pub enum ErrorKind {
     NotReady,
     /// The sensor is currently saturated and sample may be invalid.
     Saturated(Sample),
+    /// The sensor was configured with invalid input.
+    InvalidInput,
     /// A different error occurred. The original error may contain more information.
     Other,
 }
@@ -68,6 +67,7 @@ impl core::fmt::Display for ErrorKind {
             ),
             Self::NotReady => write!(f, "Sensor is not yet ready to be sampled"),
             Self::Saturated(_) => write!(f, "Sensor is saturated thus sample may be invalid"),
+            Self::InvalidInput => write!(f, "Sensor was configured with invalid input"),
             Self::Other => write!(
                 f,
                 "A different error occurred. The original error may contain more information"
