@@ -1,92 +1,50 @@
 //! Async Sensor API
 //!
-//! This module contains error-handling and traits generic to all sensors.
-//!
-//! # For HAL authors
-//!
-//! Here is an example implementation of the ThresholdWait trait for a generic sensor.
+//! This module contains traits generic to all sensors.
 //!
 //! Please see specific sensor-type modules for addtional example usage
 //! (e.g. see temperature.rs for TemperatureSensor examples).
-//!
-//! ```
-//! use embedded_sensors_async::sensor::{self, ThresholdWait, Sample};
-//!
-//! struct MySensor {
-//!     // ...
-//! }
-//!
-//! #[derive(Clone, Copy, Debug)]
-//! pub enum Error {
-//!     // ...
-//! }
-//!
-//! impl sensor::Error for Error {
-//!     fn kind(&self) -> sensor::ErrorKind {
-//!         match *self {
-//!             // ...
-//!         }
-//!     }
-//! }
-//!
-//! impl sensor::ErrorType for MySensor {
-//!     type Error = Error;
-//! }
-//!
-//! impl ThresholdWait for MySensor {
-//!     async fn wait_for_sample_low(&mut self, threshold: Sample) -> Result<(), Self::Error> {
-//!         // Enable lower threshold alerts for sensor...
-//!         // Await alert (e.g. GPIO level change)...
-//!         // Disable alerts for sensor...
-//!
-//!         Ok(())
-//!     }
-//!
-//!     async fn wait_for_sample_high(&mut self, threshold: Sample) -> Result<(), Self::Error> {
-//!         // Enable upper threshold alerts for sensor...
-//!         // Await alert (e.g. await GPIO level change)...
-//!         // Disable alerts for sensor...
-//!
-//!         Ok(())
-//!     }
-//!
-//!     async fn wait_for_sample_out_of_range(
-//!         &mut self,
-//!         threshold_low: Sample,
-//!         threshold_high: Sample
-//!     ) -> Result<(), Self::Error> {
-//!         // Enable lower and upper threshold alerts for sensor...
-//!         // Await alert (e.g. await GPIO level change)...
-//!         // Disable alerts for sensor...
-//!
-//!         Ok(())
-//!     }
-//! }
-//! ```
 
-pub use embedded_sensors::sensor::{Error, ErrorKind, ErrorType, Sample};
+pub use embedded_sensors::sensor::{Error, ErrorKind, ErrorType};
 
-/// Asynchronously wait for sample measurements to exceed specified thresholds.
-pub trait ThresholdWait: ErrorType {
-    /// Wait for a sample to be measured below the given threshold.
-    /// The threshold should be in the same units as the units returned by the sensor's sampling method
-    /// (e.g. since the TemperatureSensor temperature() method returns microdegrees Celsius,
-    /// supplied threshold should also be in microdegrees Celsius).
-    async fn wait_for_sample_low(&mut self, threshold: Sample) -> Result<(), Self::Error>;
+/// Generates a threshold wait trait for the specified sensor type.
+#[macro_export]
+macro_rules! decl_threshold_wait {
+    ($SensorName:ident, $SampleType:ty, $unit:expr) => {
+        paste::paste! {
+            #[doc = concat!(" Asynchronously wait for ", stringify!($SensorName:lower), " measurements to exceed specified thresholds.")]
+            pub trait [<$SensorName ThresholdWait>]: ErrorType {
+                #[doc = concat!(" Wait for ", stringify!($SensorName), " to be measured below the given threshold (in ", $unit, ").")]
+                async fn [<wait_for_ $SensorName:lower _low>](&mut self, threshold: $SampleType) -> Result<(), Self::Error>;
 
-    /// Wait for a sample to be measured above the given threshold.
-    /// The threshold should be in the same units as the units returned by the sensor's sampling method
-    /// (e.g. since the TemperatureSensor temperature() method returns microdegrees Celsius,
-    /// supplied threshold should also be in microdegrees Celsius).
-    async fn wait_for_sample_high(&mut self, threshold: Sample) -> Result<(), Self::Error>;
+                #[doc = concat!(" Wait for ", stringify!($SensorName), " to be measured above the given threshold (in ", $unit, ").")]
+                async fn [<wait_for_ $SensorName:lower _high>](&mut self, threshold: $SampleType) -> Result<(), Self::Error>;
 
-    /// Wait for a sample to be measured below the given lower threshold or above the given upper threshold.
-    /// The thresholds should be in the same units as the units returned by the sensor's sampling method
-    /// (e.g. since the TemperatureSensor temperature() method returns microdegrees Celsius,
-    /// supplied threshold should also be in microdegrees Celsius).
-    async fn wait_for_sample_out_of_range(
-        &mut self,
-        threshold_low: Sample,
-        threshold_high: Sample,
-    ) -> Result<(), Self::Error>;
+                #[doc = concat!(" Wait for ", stringify!($SensorName), " to be measured above or below the given high and low thresholds (in ", $unit, ").")]
+                async fn [<wait_for_ $SensorName:lower _out_of_range>](
+                    &mut self,
+                    threshold_low: $SampleType,
+                    threshold_high: $SampleType,
+                ) -> Result<(), Self::Error>;
+            }
+
+            impl<T: [<$SensorName ThresholdWait>] + ?Sized> [<$SensorName ThresholdWait>] for &mut T {
+                async fn [<wait_for_ $SensorName:lower _low>](&mut self, threshold: $SampleType) -> Result<(), Self::Error> {
+                    T::[<wait_for_ $SensorName:lower _low>](self, threshold).await
+                }
+
+                async fn [<wait_for_ $SensorName:lower _high>](&mut self, threshold: $SampleType) -> Result<(), Self::Error> {
+                    T::[<wait_for_ $SensorName:lower _high>](self, threshold).await
+                }
+
+                async fn [<wait_for_ $SensorName:lower _out_of_range>](
+                    &mut self,
+                    threshold_low: $SampleType,
+                    threshold_high: $SampleType,
+                ) -> Result<(), Self::Error> {
+                    T::[<wait_for_ $SensorName:lower _out_of_range>](self, threshold_low, threshold_high).await
+                }
+            }
+        }
+    };
 }

@@ -3,12 +3,7 @@
 //! This module contains error-handling and traits generic to all sensors.
 //!
 //! Please see specific sensor-type modules for addtional example usage
-
-/// The underlying type representing a sensor sample.
-/// Sampling methods should return samples in finer units
-/// (e.g. microdegrees Celsius instead of degrees Celsius)
-/// to maintain precision if necessary.
-pub type Sample = i64;
+//! (e.g. see temperature.rs for TemperatureSensor examples).
 
 /// Sensor error.
 pub trait Error: core::fmt::Debug {
@@ -43,7 +38,7 @@ pub enum ErrorKind {
     /// The sensor is not yet ready to be sampled.
     NotReady,
     /// The sensor is currently saturated and sample may be invalid.
-    Saturated(Sample),
+    Saturated,
     /// The sensor was configured with invalid input.
     InvalidInput,
     /// A different error occurred. The original error may contain more information.
@@ -66,7 +61,7 @@ impl core::fmt::Display for ErrorKind {
                 "An error occured on the underlying peripheral. The original error may contain more informaton"
             ),
             Self::NotReady => write!(f, "Sensor is not yet ready to be sampled"),
-            Self::Saturated(_) => write!(f, "Sensor is saturated thus sample may be invalid"),
+            Self::Saturated => write!(f, "Sensor is saturated thus samples may be invalid"),
             Self::InvalidInput => write!(f, "Sensor was configured with invalid input"),
             Self::Other => write!(
                 f,

@@ -16,3 +16,4 @@ defmt = ["dep:defmt", "embedded-sensors/defmt"]
 [dependencies]
 embedded-sensors = "0.1.0"
 defmt = { package = "defmt", version = "0.3.7", optional = true }
+paste = "1.0.15"
