@@ -12,16 +12,16 @@ pub use embedded_sensors::sensor::{Error, ErrorKind, ErrorType};
 macro_rules! decl_threshold_wait {
     ($SensorName:ident, $SampleType:ty, $unit:expr) => {
         paste::paste! {
-            #[doc = concat!(" Asynchronously wait for ", stringify!($SensorName:lower), " measurements to exceed specified thresholds.")]
+            #[doc = concat!(" Asynchronously wait for ", stringify!($SensorName), " measurements to exceed specified thresholds.")]
             pub trait [<$SensorName ThresholdWait>]: ErrorType {
                 #[doc = concat!(" Wait for ", stringify!($SensorName), " to be measured below the given threshold (in ", $unit, ").")]
-                async fn [<wait_for_ $SensorName:lower _low>](&mut self, threshold: $SampleType) -> Result<(), Self::Error>;
+                async fn [<wait_for_ $SensorName:snake _low>](&mut self, threshold: $SampleType) -> Result<(), Self::Error>;
 
                 #[doc = concat!(" Wait for ", stringify!($SensorName), " to be measured above the given threshold (in ", $unit, ").")]
-                async fn [<wait_for_ $SensorName:lower _high>](&mut self, threshold: $SampleType) -> Result<(), Self::Error>;
+                async fn [<wait_for_ $SensorName:snake _high>](&mut self, threshold: $SampleType) -> Result<(), Self::Error>;
 
                 #[doc = concat!(" Wait for ", stringify!($SensorName), " to be measured above or below the given high and low thresholds (in ", $unit, ").")]
-                async fn [<wait_for_ $SensorName:lower _out_of_range>](
+                async fn [<wait_for_ $SensorName:snake _out_of_range>](
                     &mut self,
                     threshold_low: $SampleType,
                     threshold_high: $SampleType,
@@ -29,20 +29,20 @@ macro_rules! decl_threshold_wait {
             }
 
             impl<T: [<$SensorName ThresholdWait>] + ?Sized> [<$SensorName ThresholdWait>] for &mut T {
-                async fn [<wait_for_ $SensorName:lower _low>](&mut self, threshold: $SampleType) -> Result<(), Self::Error> {
-                    T::[<wait_for_ $SensorName:lower _low>](self, threshold).await
+                async fn [<wait_for_ $SensorName:snake _low>](&mut self, threshold: $SampleType) -> Result<(), Self::Error> {
+                    T::[<wait_for_ $SensorName:snake _low>](self, threshold).await
                 }
 
-                async fn [<wait_for_ $SensorName:lower _high>](&mut self, threshold: $SampleType) -> Result<(), Self::Error> {
-                    T::[<wait_for_ $SensorName:lower _high>](self, threshold).await
+                async fn [<wait_for_ $SensorName:snake _high>](&mut self, threshold: $SampleType) -> Result<(), Self::Error> {
+                    T::[<wait_for_ $SensorName:snake _high>](self, threshold).await
                 }
 
-                async fn [<wait_for_ $SensorName:lower _out_of_range>](
+                async fn [<wait_for_ $SensorName:snake _out_of_range>](
                     &mut self,
                     threshold_low: $SampleType,
                     threshold_high: $SampleType,
                 ) -> Result<(), Self::Error> {
-                    T::[<wait_for_ $SensorName:lower _out_of_range>](self, threshold_low, threshold_high).await
+                    T::[<wait_for_ $SensorName:snake _out_of_range>](self, threshold_low, threshold_high).await
                 }
             }
         }
