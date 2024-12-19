@@ -14,6 +14,6 @@ version = "0.1.0"
 defmt = ["dep:defmt", "embedded-sensors/defmt"]
 
 [dependencies]
-embedded-sensors = "0.1.0"
+embedded-sensors = { path = "../embedded-sensors" }
 defmt = { package = "defmt", version = "0.3.7", optional = true }
 paste = "1.0.15"
