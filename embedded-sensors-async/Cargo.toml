@@ -1,5 +1,5 @@
 [package]
-authors = ["Kurtis Dinelle <t-kudinelle@microsoft.com>"]
+authors = ["Kurtis Dinelle <kdinelle@microsoft.com>"]
 categories = ["embedded", "no-std", "hardware-support"]
 edition = "2021"
 rust-version = "1.79"
