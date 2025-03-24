@@ -7,8 +7,8 @@
 //! Here is an example for the implementation of the RelativeHumiditySensor trait for a humidity sensor.
 //!
 //! ```
-//! use embedded_sensors::sensor;
-//! use embedded_sensors::humidity::{RelativeHumiditySensor, Percentage};
+//! use embedded_sensors_hal::sensor;
+//! use embedded_sensors_hal::humidity::{RelativeHumiditySensor, Percentage};
 //!
 //! // A struct representing a humidity sensor.
 //! pub struct MyHumidityensor {
