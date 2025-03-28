@@ -5,7 +5,7 @@
 //! Please see specific sensor-type modules for addtional example usage
 //! (e.g. see temperature.rs for TemperatureSensor examples).
 
-pub use embedded_sensors::sensor::{Error, ErrorKind, ErrorType};
+pub use embedded_sensors_hal::sensor::{Error, ErrorKind, ErrorType};
 
 /// Generates a threshold wait trait for the specified sensor type.
 #[macro_export]

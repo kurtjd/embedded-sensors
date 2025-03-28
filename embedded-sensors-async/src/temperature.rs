@@ -7,8 +7,8 @@
 //! Here is an example for the implementation of the TemperatureSensor and TemperatureThresholdWait traits for a temperature sensor.
 //!
 //! ```
-//! use embedded_sensors_async::sensor;
-//! use embedded_sensors_async::temperature::{TemperatureSensor, DegreesCelsius};
+//! use embedded_sensors_hal_async::sensor;
+//! use embedded_sensors_hal_async::temperature::{TemperatureSensor, DegreesCelsius};
 //!
 //! // A struct representing a temperature sensor.
 //! pub struct MyTempSensor {
@@ -72,7 +72,7 @@
 
 use crate::decl_threshold_wait;
 use crate::sensor::ErrorType;
-pub use embedded_sensors::temperature::DegreesCelsius;
+pub use embedded_sensors_hal::temperature::DegreesCelsius;
 
 /// Async Temperature Sensor methods.
 pub trait TemperatureSensor: ErrorType {

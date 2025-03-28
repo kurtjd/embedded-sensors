@@ -3,4 +3,4 @@ resolver = "2"
 members = ["embedded-sensors", "embedded-sensors-async"]
 
 [patch.crates-io]
-embedded-sensors = { path = "embedded-sensors" }
+embedded-sensors-hal = { path = "embedded-sensors" }

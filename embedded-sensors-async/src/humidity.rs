@@ -8,8 +8,8 @@
 //! and RelativityHumidityThresholdWait traits for a humidity sensor.
 //!
 //! ```
-//! use embedded_sensors_async::sensor;
-//! use embedded_sensors_async::humidity::{RelativeHumiditySensor, Percentage};
+//! use embedded_sensors_hal_async::sensor;
+//! use embedded_sensors_hal_async::humidity::{RelativeHumiditySensor, Percentage};
 //!
 //! // A struct representing a humidity sensor.
 //! pub struct MyHumiditySensor {
@@ -79,7 +79,7 @@
 
 use crate::decl_threshold_wait;
 use crate::sensor::ErrorType;
-pub use embedded_sensors::humidity::Percentage;
+pub use embedded_sensors_hal::humidity::Percentage;
 
 /// Async Relative Humidity Sensor methods.
 pub trait RelativeHumiditySensor: ErrorType {
