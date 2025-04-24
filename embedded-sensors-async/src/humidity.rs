@@ -41,38 +41,28 @@
 //! }
 //!
 //! impl RelativeHumidityThresholdWait for MyHumiditySensor {
-//!     async fn wait_for_relative_humidity_low(
+//!     async fn set_relative_humidity_threshold_low(
 //!         &mut self,
 //!         threshold: Percentage)
 //!     -> Result<(), Self::Error> {
-//!         // Enable lower threshold alerts for sensor...
-//!         // Await alert (e.g. GPIO level change)...
-//!         // Disable alerts for sensor...
-//!
+//!         // Write value to threshold low register of sensor...
 //!         Ok(())
 //!     }
 //!
-//!     async fn wait_for_relative_humidity_high(
+//!     async fn set_relative_humidity_threshold_high(
 //!         &mut self,
 //!         threshold: Percentage)
 //!     -> Result<(), Self::Error> {
-//!         // Enable upper threshold alerts for sensor...
-//!         // Await alert (e.g. await GPIO level change)...
-//!         // Disable alerts for sensor...
-//!
+//!         // Write value to threshold high register of sensor...
 //!         Ok(())
 //!     }
 //!
-//!     async fn wait_for_relative_humidity_out_of_range(
+//!     async fn wait_for_relative_humidity_threshold(
 //!         &mut self,
-//!         threshold_low: Percentage,
-//!         threshold_high: Percentage
-//!     ) -> Result<(), Self::Error> {
-//!         // Enable lower and upper threshold alerts for sensor...
-//!         // Await alert (e.g. await GPIO level change)...
-//!         // Disable alerts for sensor...
-//!
-//!         Ok(())
+//!     ) -> Result<Percentage, Self::Error> {
+//!         // Await threshold alert (e.g. await GPIO level change on ALERT pin)...
+//!         // Then return current relative humidity so caller can determine which threshold was crossed
+//!         self.relative_humidity().await
 //!     }
 //! }
 //! ```
@@ -94,4 +84,9 @@ impl<T: RelativeHumiditySensor + ?Sized> RelativeHumiditySensor for &mut T {
     }
 }
 
-decl_threshold_wait!(RelativeHumidity, Percentage, "percentage");
+decl_threshold_wait!(
+    RelativeHumidity,
+    RelativeHumiditySensor,
+    Percentage,
+    "percentage"
+);

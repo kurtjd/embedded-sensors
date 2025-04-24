@@ -40,32 +40,20 @@
 //! }
 //!
 //! impl TemperatureThresholdWait for MyTempSensor {
-//!     async fn wait_for_temperature_low(&mut self, threshold: DegreesCelsius) -> Result<(), Self::Error> {
-//!         // Enable lower threshold alerts for sensor...
-//!         // Await alert (e.g. GPIO level change)...
-//!         // Disable alerts for sensor...
-//!
+//!     async fn set_temperature_threshold_low(&mut self, threshold: DegreesCelsius) -> Result<(), Self::Error> {
+//!         // Write value to threshold low register of sensor...
 //!         Ok(())
 //!     }
 //!
-//!     async fn wait_for_temperature_high(&mut self, threshold: DegreesCelsius) -> Result<(), Self::Error> {
-//!         // Enable upper threshold alerts for sensor...
-//!         // Await alert (e.g. await GPIO level change)...
-//!         // Disable alerts for sensor...
-//!
+//!     async fn set_temperature_threshold_high(&mut self, threshold: DegreesCelsius) -> Result<(), Self::Error> {
+//!         // Write value to threshold high register of sensor...
 //!         Ok(())
 //!     }
 //!
-//!     async fn wait_for_temperature_out_of_range(
-//!         &mut self,
-//!         threshold_low: DegreesCelsius,
-//!         threshold_high: DegreesCelsius
-//!     ) -> Result<(), Self::Error> {
-//!         // Enable lower and upper threshold alerts for sensor...
-//!         // Await alert (e.g. await GPIO level change)...
-//!         // Disable alerts for sensor...
-//!
-//!         Ok(())
+//!     async fn wait_for_temperature_threshold(&mut self) -> Result<DegreesCelsius, Self::Error> {
+//!         // Await threshold alert (e.g. await GPIO level change on ALERT pin)...
+//!         // Then return current temperature so caller can determine which threshold was crossed
+//!         self.temperature().await
 //!     }
 //! }
 //! ```
@@ -87,4 +75,9 @@ impl<T: TemperatureSensor + ?Sized> TemperatureSensor for &mut T {
     }
 }
 
-decl_threshold_wait!(Temperature, DegreesCelsius, "degrees Celsius");
+decl_threshold_wait!(
+    Temperature,
+    TemperatureSensor,
+    DegreesCelsius,
+    "degrees Celsius"
+);
