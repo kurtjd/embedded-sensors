@@ -57,10 +57,12 @@
 //!         Ok(())
 //!     }
 //!
-//!     async fn wait_for_relative_humidity_threshold(
+//!     async fn wait_for_relative_humidity_threshold<ALERT: embedded_hal_async::digital::Wait>(
 //!         &mut self,
+//!         alert: ALERT,
 //!     ) -> Result<Percentage, Self::Error> {
 //!         // Await threshold alert (e.g. await GPIO level change on ALERT pin)...
+//!         alert.wait_for_rising_edge().await.map_err(|_| ...)?;
 //!         // Then return current relative humidity so caller can determine which threshold was crossed
 //!         self.relative_humidity().await
 //!     }

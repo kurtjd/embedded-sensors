@@ -50,8 +50,9 @@
 //!         Ok(())
 //!     }
 //!
-//!     async fn wait_for_temperature_threshold(&mut self) -> Result<DegreesCelsius, Self::Error> {
+//!     async fn wait_for_temperature_threshold<ALERT: embedded_hal_async::digital::Wait>(&mut self, alert: ALERT) -> Result<DegreesCelsius, Self::Error> {
 //!         // Await threshold alert (e.g. await GPIO level change on ALERT pin)...
+//!         alert.wait_for_rising_edge().await.map_err(|_| ...)?;
 //!         // Then return current temperature so caller can determine which threshold was crossed
 //!         self.temperature().await
 //!     }
