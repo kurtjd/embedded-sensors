@@ -9,7 +9,7 @@
 //!
 //! ```
 //! use embedded_sensors_hal_async::sensor;
-//! use embedded_sensors_hal_async::humidity::{RelativeHumiditySensor, Percentage};
+//! use embedded_sensors_hal_async::humidity::{RelativeHumiditySensor, RelativeHumidityThreshold, Percentage};
 //!
 //! // A struct representing a humidity sensor.
 //! pub struct MyHumiditySensor {

@@ -8,7 +8,7 @@
 //!
 //! ```
 //! use embedded_sensors_hal_async::sensor;
-//! use embedded_sensors_hal_async::temperature::{TemperatureSensor, DegreesCelsius};
+//! use embedded_sensors_hal_async::temperature::{TemperatureSensor, TemperatureThreshold, DegreesCelsius};
 //!
 //! // A struct representing a temperature sensor.
 //! pub struct MyTempSensor {
